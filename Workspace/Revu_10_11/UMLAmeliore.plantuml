@@ -1,0 +1,126 @@
+@startuml
+abstract class Personne
+' Faire une clé artificielle
+    Personne : nom : string
+    Personne : prenom : string
+    Personne : date de naissance : date
+    Personne : adresse : string
+    Personne : numero de telephone : string
+
+
+class Client
+
+
+abstract class Personnel
+    
+
+note bottom of Personnel
+Ne peuvent pas avoir 
+d'animaux de companie 
+suvie dans la clinique
+end note
+
+
+class Espece
+Espece : type : {félins, canidés, reptiles, rongeurs, oiseaux, autres} 
+
+
+class Animal
+' Faire une clé artificelle 
+Animal : nom : string
+Animal : date de naissance : date
+' #TODO Attention peut être juste année ou inconnu
+Animal : num_puce : int
+Animal : passeport : int
+' num_puce et passeport peuvent être null
+
+note right of Animal
+date_de_naissance peut être
+ inconnue ou juste l'année 
+end note
+
+class Medicament
+Medicament : nom_molécule : string {key}
+Medicament : description_effet : string
+
+
+class Entree
+Entree : saisie : timestamp
+Entree : taille : float
+Entree : poids : float
+Entree : resultat_analyse : string
+' Entree : observation : string
+' Entree : véto_observation : string
+Entree : procedure : string
+Entree : description_procedure : string
+
+
+class Observation
+Observation : observation : string
+
+class Quantite
+Quantite : quantite : int
+
+class Traitement
+Traitement : date_debut : date
+Traitement : date_fin : date
+Traitement : duree()
+
+' note bottom of Traitement
+' Seul le vétérinaire peut prescrire un traitement
+' end note
+
+class Vétérinaire
+
+class Assistant
+
+class EstProprio {
+
+date_debut: date
+date_fin : date
+
+}
+
+' note right of EstProprio
+' date_debut ne peut pas être NULL
+' date_fin peut être NULL 
+' end note
+
+class ASuivi {
+
+date_debut : date
+date_fin : date
+
+}
+
+' note right of ASuivi
+' date_debut ne peut pas être NULL
+' date_fin peut être NULL 
+' end note
+
+
+
+Medicament "*" -- "*" Espece : est autorise pour >
+Client "*" -- "*" Animal : est proprietaire de >
+(Client, Animal) .. EstProprio
+Personnel "*" -- "*" Espece : est specialise dans > 
+Vétérinaire "*" -- "*" Traitement : prescrire >
+Vétérinaire "*" -- "*" Animal : suit >
+(Vétérinaire, Animal) .. ASuivi
+Traitement "*" -- "1..N" Medicament : utilise >
+(Traitement, Medicament) .. Quantite
+Animal "*" - "1" Espece : est de type >
+Animal "1" -- "*" Entree : possede >
+Entree "*" -- "*" Traitement : est associé à <
+Vétérinaire --|> Personnel
+Assistant --|> Personnel
+Entree "1" -- "1" Observation : possède >
+Observation "*" -- "1" Personnel : ecrit <
+
+'Animaux_domestiques --|> Espece
+
+Client -- Personnel : {XOR}
+Assistant -- Vétérinaire : {XOR}
+Personnel--|> Personne 
+Client --|> Personne
+@enduml

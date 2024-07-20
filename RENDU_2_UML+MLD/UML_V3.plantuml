@@ -1,0 +1,98 @@
+@startuml
+abstract class Personne
+' Faire une clé artificielle
+    Personne : nom : string
+    Personne : prenom : string
+    Personne : date de naissance : date
+    Personne : adresse : string
+    Personne : numero de telephone : string
+
+
+class Client
+
+
+class Personnel
+    Personnel : Poste : {vétérinaire, assistant}
+
+note top of Personnel
+Ne peuvent pas avoir d'animaux de companie suvie dans la clinique
+end note
+
+
+class Espece
+Espece : type : {félins, canidés, reptiles, rongeurs, oiseaux, autres} 
+
+
+class Animal
+' Faire une clé artificelle 
+Animal : nom : string
+Animal : date de naissance : date
+' #TODO Attention peut être juste année ou inconnu
+Animal : num_puce : int
+Animal : passeport : int
+' num_puce et passeport peuvent être null
+
+note right of Animal
+num_puce et passeport peuvent être null
+date_de_naissance peut être inconnue ou juste l'année 
+end note
+
+class Medicament
+Medicament : nom_molécule : string {key}
+Medicament : description_effet : string
+
+class proprio
+proprio : nom : string
+proprio : periode_debut : date
+proprio : periode_fin : date
+
+class veto
+veto : nom : string
+veto : periode_debut : date
+veto : periode_fin : date
+
+
+class Dossier
+Dossier : taille : int
+Dossier : poids : int
+Dossier : resultat_analyse : string
+Dossier : observation : string
+Dossier : véto_observation : string
+Dossier : procedure : string
+Dossier : description_procedure : string
+
+
+class Entree 
+Entree : type : {taille, poids, resultat_analyse, observation, véto_observation, procedure, description_procedure}
+Entree : heure_saisie : time {local key}
+Entree : date_saisie : date
+
+
+class Traitement
+Traitement : nom : string
+Traitement : datedebut : date
+Traitement : duree : date
+Traitement : quantité : int
+
+note bottom of Traitement
+Seul le vétérinaire peut prescrire un traitement
+end note
+
+Medicament "*" -- "*" Espece : est autorise pour >
+proprio "*" -- "1" Animal : a ete proprietaire de >
+Personnel "*" -- "*" Espece : est specialise dans > 
+Personnel "1" -- "1" Traitement : prescrire >
+veto "*" -- "1" Animal : a suivi >
+Traitement "*" - "*" Medicament : utilise >
+Animal "*" - "1" Espece : est de type >
+Animal "1" -- "1" Dossier : possede >
+Client "1" -- "*" Animal : possede >
+Dossier "1" -- "*" Traitement : est associé à <
+Entree "*" --* "1" Dossier : est composé de <
+
+'Animaux_domestiques --|> Espece
+
+Client -- Personnel : {XOR}
+Personnel--|> Personne 
+Client --|> Personne
+@enduml

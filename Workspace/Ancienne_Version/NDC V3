@@ -1,0 +1,155 @@
+Note de Clarification - Exercice Clinique vétérinaire
+
+Gestionnaire de clinique vétérinaire. Ce gestionnaire doit prendre en compte la gestion : 
+
+- Des patients(animaux)
+- Des clients
+- Du personnel soignant
+- Des médicaments
+
+Client + Personnel: 
+    Propriétés :
+                    -Nom
+                    -Prénom 
+                    -Date de naissance
+                    -Adresse
+                    -Numéro de téléphone
+    Contraintes :
+                    -Un client ne peut pas être personnel
+                    -Un personnel ne peut pas être client
+    Fonctions : 
+                    -Posséder un ou plusieurs animaux à soigner
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+
+Personnel : 
+    Propriétés : 
+                    -Poste {vétérinaire, assistant}
+                    -Spécialité -> espèces animales les mieux traitées
+    Contraintes :
+                    -Ne peuvent pas avoir d'animaux de companie suvie dans la clinique
+    Fonctions :
+                    -Prescrire des traitements seulement si le personnel en question est un vétérinaire
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+
+Animaux domestiques : 
+    Propriétés : 
+                    -Taille {petite, moyenne}
+                    -Type {félins, canidés, reptiles, rongeurs, oiseaux, Autres} avec Autres correspondant à tous les animaux qui ne sont pas décrits dans type
+
+Animal : 
+    Propriétés : 
+                    -Nom
+                    -Espèce
+                    -Date de naissance
+                    -Numéro de puce
+                    -Numéro de passeport
+                    -Liste de ses propriétaires
+                    -Liste des vétérinaires
+    Contraintes : 
+                    -Date de naissance peut être une année ou inconnue
+                    -Un animal n'a pas forcément de numéro de puce
+                    -Un animal n'a pas forcément de numéro passeport
+    Fonctions : 
+                    -Etre possédé par un client
+                    -Etre associé à un dossier
+                    -Posséder une liste de ses anciens propriétaires
+                    -Posséder une liste de ses anciens vétérinaires
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+                    -CLient/Propriétaire actuel
+                    
+
+
+Liste des propriétaires : 
+    Propriétés : 
+                    -Période avec l'animal 
+                    -Nom
+    Fonctions : 
+                    -Avoir possédé un animal
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+                    -CLient/Propriétaire actuel
+
+Liste des vétérinaires: 
+    Propriétés : 
+                    -Noms
+                    -Date/période
+    Fonctions : 
+                    -Avoir suivi un animal                        
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+                    -CLient/Propriétaire actuel
+
+Dossier médical : 
+    Propriétés : 
+                    -Taille
+                    -Poids
+                    -Traitement
+                    -Résultats d'analyse : URL
+                    -Observation
+                    -Nom de la personne qui a fait l'observation
+                    -Description de la procédure réalisée
+                    -Date et heure de chaque entrée
+    Contraintes : 
+                    -Doit se référer à un seul animal
+    Fonctions : 
+                    -Répertorier les informations d'un animal
+                    -Indiquer le traitement que suit l'animal
+                    -Répertorier toutes les entrées du dossier
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+
+
+Traitement : 
+    Propriétés : 
+                    -Nom
+                    -Date de début
+                    -Date de fin
+                    -Durée
+                    -Quantité par jour / Médicaments prescrits
+    Contraintes :
+                    -Seul un vétérinaire peut prescrire un traitement
+    Fonctions : 
+                    -Répertorier les médicaments utilisés pour le traitement
+                    -Etre associé à un dossier
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+
+Médicaments : 
+    Propriétés : 
+                    -Nom de la molécule
+                    -Explication des effets
+    Contraintes :
+                    -Certains médicaments sont interdits sur certaines espèces
+    Fonctions : 
+                    -Etre utilisé dans un ou plusieurs traitements
+                    -Etre autorisé pour certaines espèces
+    Utilisateurs pouvant modifier ces données : 
+                    -Personnel de la clinique
+
+Liste des associations et leur cardinalité :
+
+Medicament est autorise pour Espece (* - *)
+proprio a ete proprietaire de Animal (* - 1) 
+Personnel est specialise dans Espece (* - *) 
+Personnel prescrit Traitement (1 - 1)
+veto a suivi Animal (* - 1)
+Traitement utilise Medicament (1 - *)
+Animal est de type Espece (1 - *)
+Animal possède Dossier (1 - 1)
+Client  possède Animal (1 - *)
+Dossier associe Traitement (1 - *)
+Entree compose Dossier (* - 1)
+
+Héritages : 
+
+Animaux_domestiques hérite de la classe abstraite Espece
+Client hérite de la classe abstraite Personne
+Personnel hérite de la classe abstraite Personne
+
+Justifications :
+
+Pour les classes Personne et Entree, nous avons décidé de créer des classes abstraites car les classes Personnel et Client ont un certain nombre d'attributs en commun et parce que cela rendait la lecture plus facile pour la classe abstraite, même si nous aurions également pu faire une classe non-abstraite avec un attribut type.
+Pour les classes qui ne possèdent pas de clé, nous avons fait le choix d'utiliser des clés artificielles lors de l'implémentation.

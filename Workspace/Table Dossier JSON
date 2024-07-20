@@ -1,0 +1,11 @@
+
+
+CREATE TABLE Dossier(
+		entree JSON,
+		id_dossier INTEGER,
+		id_animal INTEGER,
+		id_personnel INTEGER,
+		FOREIGN KEY (id_personnel) REFERENCES Personnel(id_personnel),
+        FOREIGN KEY (id_animal) REFERENCES Animal(id_animal),
+        PRIMARY KEY (id_dossier),
+);
